@@ -1,6 +1,6 @@
-# Assistant Virtuel Polyvalent avec LangChain
+# Job Engine - Chatbot Assistant
 
-Un assistant virtuel intelligent développé avec LangChain, FastAPI et OpenAI, capable de maintenir le contexte conversationnel et de fournir des réponses pertinentes grâce à une base de connaissances vectorielle.
+Un assistant virtuel intelligent développé avec LangChain, FastAPI et OpenAI, capable de maintenir le contexte conversationnel et de fournir des réponses pertinentes grâce à une base de connaissances vectorielle. Inclut également une fonctionnalité de recherche d'emploi via l'API RapidAPI JSearch.
 
 ## Fonctionnalités
 
@@ -9,12 +9,14 @@ Un assistant virtuel intelligent développé avec LangChain, FastAPI et OpenAI, 
 - 📚 Gestion de base de données vectorielle (ChromaDB)
 - 🔄 Gestion de sessions utilisateur multiples
 - 📄 Support pour l'ajout de documents à la base de connaissances
+- 🔍 Recherche d'emploi avec filtres avancés (RapidAPI JSearch)
 - 🌐 API REST complète avec documentation automatique
 
 ## Prérequis
 
 - Python 3.9 ou supérieur
-- Clé API OpenAI
+- Clé API OpenAI (requis)
+- Clé API RapidAPI (optionnel, pour la recherche d'emploi)
 
 ## Installation
 
@@ -73,44 +75,6 @@ uvicorn app.main:app --reload
 - `GET /jobs/search/summary` - Rechercher des emplois avec résumé formaté
 - `GET /jobs/{job_id}` - Récupérer les détails d'un emploi spécifique
 
-## Exemples d'utilisation
-
-### Chat
-
-```python
-import requests
-
-# Envoyer un message
-response = requests.post("http://localhost:8000/chat", json={
-    "message": "Bonjour, pouvez-vous m'aider ?",
-    "session_id": "user-123"
-})
-
-print(response.json())
-```
-
-### Recherche d'emploi
-
-```python
-import requests
-
-# Rechercher des emplois
-response = requests.get("http://localhost:8000/jobs/search", params={
-    "query": "développeur Python",
-    "location": "Paris, France"
-})
-
-print(response.json())
-
-# Recherche avec résumé formaté
-response = requests.get("http://localhost:8000/jobs/search/summary", params={
-    "query": "data scientist",
-    "limit": 5
-})
-
-print(response.json())
-```
-
 ## Structure du projet
 
 ```
@@ -120,13 +84,64 @@ chatbot-langchain/
 │   ├── config.py            # Configuration
 │   ├── models/              # Modèles Pydantic
 │   ├── services/            # Services métier
+│   │   ├── llm_service.py      # Service LLM avec LangChain
+│   │   ├── memory_service.py   # Gestion de la mémoire
+│   │   ├── vector_store.py      # Base de données vectorielle
+│   │   └── job_search_service.py # Recherche d'emploi
 │   └── routers/             # Routes API
+│       ├── chat.py          # Routes de chat
+│       └── jobs.py          # Routes de recherche d'emploi
 ├── data/
 │   └── knowledge_base/      # Documents de connaissances
-└── requirements.txt
+├── examples/                # Exemples d'utilisation
+│   ├── example_usage.py     # Exemples d'utilisation de l'API
+│   ├── example_job_search.py # Exemples de recherche d'emploi
+│   └── frontend_example.html # Exemple frontend HTML
+├── requirements.txt         # Dépendances Python
+├── README.md                # Documentation principale
+└── FRONTEND_API_DOCS.md     # Documentation frontend
 ```
 
-## Documentation Frontend
+## Exemples d'utilisation
+
+### Exemples Python
+
+Le projet inclut des exemples Python dans le dossier `examples/` :
+
+```bash
+# Exemple d'utilisation générale de l'API
+python examples/example_usage.py
+
+# Exemple de recherche d'emploi
+python examples/example_job_search.py
+```
+
+### Exemples de code
+
+**Chat :**
+```python
+import requests
+
+response = requests.post("http://localhost:8000/chat", json={
+    "message": "Bonjour, pouvez-vous m'aider ?",
+    "session_id": "user-123"
+})
+print(response.json())
+```
+
+**Recherche d'emploi :**
+```python
+import requests
+
+response = requests.get("http://localhost:8000/jobs/search", params={
+    "query": "développeur Python",
+    "country": "France",
+    "language": "fr"
+})
+print(response.json())
+```
+
+### Documentation Frontend
 
 Pour intégrer l'API dans votre application frontend, consultez la **[documentation frontend complète](FRONTEND_API_DOCS.md)** qui inclut :
 
@@ -134,6 +149,8 @@ Pour intégrer l'API dans votre application frontend, consultez la **[documentat
 - Exemples React et Vue.js
 - Gestion des erreurs
 - Exemple HTML fonctionnel (`examples/frontend_example.html`)
+
+Vous pouvez également tester directement l'exemple HTML en ouvrant `examples/frontend_example.html` dans votre navigateur (assurez-vous que le serveur backend est démarré).
 
 ## Technologies utilisées
 
@@ -143,6 +160,34 @@ Pour intégrer l'API dans votre application frontend, consultez la **[documentat
 - **ChromaDB** : Base de données vectorielle
 - **Pydantic** : Validation de données
 - **RapidAPI JSearch** : API de recherche d'emploi
+- **Python 3.9+** : Langage de programmation
+
+## Configuration avancée
+
+Vous pouvez personnaliser l'application via les variables d'environnement dans le fichier `.env` :
+
+```bash
+# Application
+APP_NAME=Job Engine - Chatbot Assistant
+APP_VERSION=1.0.0
+APP_DESCRIPTION=Votre description personnalisée
+DEBUG=False
+
+# OpenAI
+OPENAI_API_KEY=votre_cle_openai
+OPENAI_MODEL=gpt-3.5-turbo
+TEMPERATURE=0.7
+MAX_TOKENS=1000
+
+# RapidAPI (optionnel)
+RAPIDAPI_KEY=votre_cle_rapidapi
+
+# ChromaDB
+CHROMA_PERSIST_DIRECTORY=./chroma_db
+
+# RAG
+RETRIEVER_K=4
+```
 
 ## Licence
 
