@@ -56,15 +56,51 @@ async function sendMessage(message, sessionId = 'default') {
 const result = await sendMessage('Bonjour, comment ça va ?', 'user-123');
 console.log(result.answer); // Réponse de l'assistant
 console.log(result.sources); // Sources utilisées (si RAG)
+
+// Recherche d'emploi dans le chat (détection automatique)
+const jobResult = await sendMessage('Je cherche un emploi de développeur Python en France', 'user-123');
+console.log(jobResult.answer); // Réponse avec résultats d'emploi
+if (jobResult.job_search) {
+  console.log(`Emplois trouvés: ${jobResult.job_search.total}`);
+  jobResult.job_search.jobs.forEach(job => {
+    console.log(`- ${job.job_title} chez ${job.employer_name}`);
+  });
+}
 ```
 
-**Réponse:**
+**Réponse (chat normal):**
 ```json
 {
   "answer": "Bonjour ! Je vais bien, merci. Comment puis-je vous aider ?",
   "sources": [],
   "session_id": "user-123",
-  "error": null
+  "error": null,
+  "job_search": null
+}
+```
+
+**Réponse (avec recherche d'emploi):**
+```json
+{
+  "answer": "Voici les résultats de ma recherche d'emploi pour développeur Python en France...",
+  "sources": [],
+  "session_id": "user-123",
+  "error": null,
+  "job_search": {
+    "query": "développeur Python",
+    "country": "France",
+    "total": 15,
+    "jobs": [
+      {
+        "job_id": "abc123",
+        "job_title": "Développeur Python",
+        "employer_name": "TechCorp",
+        "job_city": "Paris",
+        "job_country": "France",
+        "job_apply_link": "https://example.com/apply"
+      }
+    ]
+  }
 }
 ```
 

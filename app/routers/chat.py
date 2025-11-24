@@ -104,6 +104,31 @@ async def get_chat_history(session_id: str):
         )
 
 
+@router.get("/session/{session_id}/job-searches")
+async def get_job_search_history(session_id: str):
+    """
+    Récupère l'historique des recherches d'emploi d'une session
+    
+    Returns:
+        Liste des recherches d'emploi effectuées dans cette session
+    """
+    try:
+        from app.services.memory_service import memory_service
+        
+        searches = memory_service.get_job_search_history(session_id)
+        
+        return {
+            "session_id": session_id,
+            "job_searches": searches,
+            "count": len(searches)
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Erreur lors de la récupération de l'historique: {str(e)}"
+        )
+
+
 @router.delete("/session/{session_id}")
 async def delete_session(session_id: str):
     """

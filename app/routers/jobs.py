@@ -12,7 +12,7 @@ router = APIRouter(prefix="/jobs", tags=["jobs"])
 @router.get("/search")
 async def search_jobs(
     query: str = Query(..., description="Termes de recherche (titre du poste, compétences, etc.)"),
-    country: Optional[str] = Query(None, description="Localisation (ville, pays, etc.)"),
+    country: Optional[str] = Query(None, description="Code pays ISO à 2 lettres (fr, de, es, it, be, ch, ca, us, etc.)"),
     language: Optional[str] = Query("fr", description="Langue optionnelle"),
     num_pages: int = Query(1, ge=1, le=10, description="Nombre de pages à récupérer"),
     employment_types: Optional[str] = Query(
@@ -33,7 +33,7 @@ async def search_jobs(
     Recherche des emplois selon les critères spécifiés
     
     - **query**: Termes de recherche (requis)
-    - **country**: Pays optionnel
+    - **country**: Code pays ISO à 2 lettres (fr, de, es, it, be, ch, ca, us, etc.)
     - **language**: Langue optionnelle
     - **num_pages**: Nombre de pages (défaut: 1, max: 10)
     - **employment_types**: Types d'emploi

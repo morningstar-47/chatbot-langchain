@@ -9,7 +9,8 @@ Un assistant virtuel intelligent développé avec LangChain, FastAPI et OpenAI, 
 - 📚 Gestion de base de données vectorielle (ChromaDB)
 - 🔄 Gestion de sessions utilisateur multiples
 - 📄 Support pour l'ajout de documents à la base de connaissances
-- 🔍 Recherche d'emploi avec filtres avancés (RapidAPI JSearch)
+- 🔍 Recherche d'emploi intelligente intégrée dans le chat (détection automatique)
+- 🔍 Recherche d'emploi avec filtres avancés via API (RapidAPI JSearch)
 - 🌐 API REST complète avec documentation automatique
 
 ## Prérequis
@@ -87,7 +88,8 @@ chatbot-langchain/
 │   │   ├── llm_service.py      # Service LLM avec LangChain
 │   │   ├── memory_service.py   # Gestion de la mémoire
 │   │   ├── vector_store.py      # Base de données vectorielle
-│   │   └── job_search_service.py # Recherche d'emploi
+│   │   ├── job_search_service.py # Recherche d'emploi
+│   │   └── job_intent_detector.py # Détection d'intention de recherche d'emploi
 │   └── routers/             # Routes API
 │       ├── chat.py          # Routes de chat
 │       └── jobs.py          # Routes de recherche d'emploi
@@ -96,6 +98,7 @@ chatbot-langchain/
 ├── examples/                # Exemples d'utilisation
 │   ├── example_usage.py     # Exemples d'utilisation de l'API
 │   ├── example_job_search.py # Exemples de recherche d'emploi
+│   ├── test_job_search_in_chat.py # Test recherche d'emploi dans le chat
 │   └── frontend_example.html # Exemple frontend HTML
 ├── requirements.txt         # Dépendances Python
 ├── README.md                # Documentation principale
@@ -112,9 +115,23 @@ Le projet inclut des exemples Python dans le dossier `examples/` :
 # Exemple d'utilisation générale de l'API
 python examples/example_usage.py
 
-# Exemple de recherche d'emploi
+# Exemple de recherche d'emploi via API
 python examples/example_job_search.py
+
+# Test de recherche d'emploi dans le chat (détection automatique)
+python examples/test_job_search_in_chat.py
 ```
+
+### Recherche d'emploi dans le chat
+
+Le chatbot détecte automatiquement les demandes de recherche d'emploi dans la conversation. Vous pouvez simplement demander :
+
+- "Je cherche un emploi de développeur Python en France"
+- "Trouve-moi des postes de data scientist en télétravail"
+- "Y a-t-il des offres d'emploi pour ingénieur logiciel à Paris ?"
+- "Recherche des emplois de designer UX remote"
+
+Le chatbot effectuera automatiquement la recherche et présentera les résultats dans sa réponse, avec les détails des emplois trouvés.
 
 ### Exemples de code
 

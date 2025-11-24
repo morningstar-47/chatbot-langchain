@@ -34,7 +34,7 @@ class JobSearchService:
         
         Args:
             query: Termes de recherche (titre du poste, compétences, etc.)
-            country: Pays (France, Allemagne, etc.)
+            country: Code pays ISO à 2 lettres (fr, de, es, it, be, ch, ca, us, etc.)
             language: Langue (fr, en, es, etc.)
             num_pages: Nombre de pages à récupérer (défaut: 1)
             employment_types: Types d'emploi (FULLTIME, PARTTIME, CONTRACTOR, INTERN)
@@ -72,8 +72,7 @@ class JobSearchService:
             if date_posted:
                 params["date_posted"] = date_posted
             
-            if remote_jobs_only:
-                params["remote_jobs_only"] = "true"
+            params["remote_jobs_only"] = "true" if remote_jobs_only else "false"
             
             # Faire l'appel à l'API
             response = requests.get(

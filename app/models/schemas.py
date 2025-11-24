@@ -17,6 +17,7 @@ class ChatResponse(BaseModel):
     sources: List[Dict[str, Any]] = Field(default_factory=list, description="Sources utilisées pour la réponse")
     session_id: str = Field(..., description="Identifiant de la session")
     error: Optional[str] = Field(None, description="Message d'erreur éventuel")
+    job_search: Optional[Dict[str, Any]] = Field(None, description="Résultats de recherche d'emploi si applicable")
 
 
 class Message(BaseModel):

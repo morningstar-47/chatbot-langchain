@@ -25,6 +25,7 @@ venv/
 ENV/
 env/
 .venv
+langchain/
 
 # Environment variables
 .env
